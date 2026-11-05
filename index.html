@@ -93,6 +93,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .art.red{background:var(--red);color:#fff}
 .art.black{background:#111;color:#fff}
 .art.paper{background:#f4f2ee;color:#111}
+.art.blank{background:var(--edge);color:var(--fg)}
 .art b{font-family:var(--font);font-weight:800;font-size:calc(var(--size) * .16);line-height:.9;letter-spacing:-.02em}
 .art small{font-size:calc(var(--size) * .055);opacity:.85}
 
@@ -145,7 +146,13 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 
 <section class="view page" id="inspo" hidden>
   <div class="bar"><a href="#">SOPHIE BERRY</a><span>Some Current Inspo</span></div>
-  <div class="stub">Some Current Inspo</div>
+  <div class="stagewrap"><div class="flow" id="inspoFlow" tabindex="0" aria-label="Current inspiration, use arrow keys to browse"></div></div>
+  <div class="label">
+    <div class="arrows">
+      <button class="btn ghost" type="button" data-step="-1" data-flow="inspo" aria-label="Previous">←</button>
+      <button class="btn ghost" type="button" data-step="1" data-flow="inspo" aria-label="Next">→</button>
+    </div>
+  </div>
 </section>
 
 <section class="view page" id="contact" hidden>
@@ -316,8 +323,16 @@ const contact=coverFlow(document.getElementById('contactFlow'),
   CONTACT.map(c=>({label:c.title,html:c.img?`<img src="images/${c.img}.jpg" alt="" draggable="false">`:c.art})),1,
   i=>{const c=CONTACT[i];cTitle.textContent=c.title;cSub.textContent=c.sub;cAct.innerHTML=c.action});
 
+/* inspo: add picture filenames (in images/inspo/) to this list */
+const INSPO=[];
+const inspoItems=INSPO.length
+  ?INSPO.map((f,i)=>({label:`Inspo ${i+1}`,html:`<img src="images/inspo/${f}" alt="" draggable="false">`}))
+  :Array.from({length:7},(_,i)=>({label:`Inspo ${i+1}`,html:`<div class="art blank"><small>some current inspo</small><b>${String(i+1).padStart(2,'0')}</b></div>`}));
+const inspo=coverFlow(document.getElementById('inspoFlow'),inspoItems,3,()=>{},{hoverScroll:true,loop:true});
+
+const flows={work,contact,inspo};
 document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{
-  (b.dataset.flow==='work'?work:contact).step(+b.dataset.step);
+  flows[b.dataset.flow].step(+b.dataset.step);
 }));
 
 /* toast + copy */
@@ -340,6 +355,7 @@ function show(){
   scrollTo(0,0);
   if(target.id==='work'){work.go(work.cur)}
   if(target.id==='contact'){contact.go(contact.cur)}
+  if(target.id==='inspo'){inspo.go(inspo.cur)}
 }
 addEventListener('hashchange',show);show();
 </script>
