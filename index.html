@@ -108,6 +108,16 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .art small{font-size:calc(var(--size) * .055);opacity:.85}
 
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:15px;padding:10px 20px;border-radius:999px;z-index:20}
+/* music button, bottom right on every page */
+.music{position:fixed;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:15;width:56px;height:56px;border-radius:50%;border:0;background:var(--red);color:var(--bg);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgb(160 0 40 / .3);transition:transform .2s}
+.music:hover{transform:scale(1.08)}
+.music svg{width:24px;height:24px;grid-area:1/1}
+.music .i-pause,.music.on .i-play{display:none}
+.music.on .i-pause{display:block}
+.music.on{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 6px 20px rgb(160 0 40 / .3),0 0 0 10px rgb(227 19 44 / .12)}}
+@media (prefers-reduced-motion:reduce){.music.on{animation:none}}
+
 /* carousel pages: covers and title sit in the middle of the screen */
 .stagewrap{margin-top:auto}
 .stagewrap + .label{margin-bottom:auto;margin-top:-28px;position:relative;z-index:1}
@@ -179,6 +189,8 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
   <a class="mail" href="mailto:sophienberry@gmail.com">sophienberry@gmail.com</a>
 </section>
 
+<audio id="song" src="audio/pitch-the-baby.mp3" loop preload="none"></audio>
+<button class="music" id="music" type="button" aria-label="Play Pitch the Baby by Cocteau Twins" aria-pressed="false"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg></button>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -357,6 +369,12 @@ document.addEventListener('click',e=>{
     getSelection().removeAllRanges();getSelection().addRange(r);say('Email selected, copy it with ⌘C');
   });
 });
+
+/* music: tap to play, tap again to pause; keeps playing while moving between pages */
+const song=document.getElementById("song"),music=document.getElementById("music");
+function setMusic(on){music.classList.toggle("on",on);music.setAttribute("aria-pressed",on);music.setAttribute("aria-label",(on?"Pause":"Play")+" Pitch the Baby by Cocteau Twins")}
+music.addEventListener("click",()=>{ if(song.paused){song.play().then(()=>setMusic(true)).catch(()=>setMusic(false))} else {song.pause();setMusic(false)} });
+song.addEventListener("pause",()=>setMusic(false));song.addEventListener("play",()=>setMusic(true));
 
 /* routing */
 const views=[...document.querySelectorAll('.view')];
