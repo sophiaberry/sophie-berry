@@ -110,7 +110,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:15px;padding:10px 20px;border-radius:999px;z-index:20}
 /* carousel pages: covers and title sit in the middle of the screen */
 .stagewrap{margin-top:auto}
-.stagewrap + .label{margin-bottom:auto}
+.stagewrap + .label{margin-bottom:auto;margin-top:-28px;position:relative;z-index:1}
 @media (max-width:700px){
   .flow{--size:min(64vw,340px)}
   #home nav{display:grid;grid-template-columns:auto auto;justify-content:center;gap:10px 32px}
