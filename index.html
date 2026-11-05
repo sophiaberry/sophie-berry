@@ -108,15 +108,20 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .art small{font-size:calc(var(--size) * .055);opacity:.85}
 
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:15px;padding:10px 20px;border-radius:999px;z-index:20}
-/* music button, bottom right on every page */
-.music{position:fixed;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:15;width:56px;height:56px;border-radius:50%;border:0;background:var(--red);color:var(--bg);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgb(160 0 40 / .3);transition:transform .2s}
-.music:hover{transform:scale(1.08)}
-.music svg{width:24px;height:24px;grid-area:1/1}
+/* music: a small record, bottom right on every page; spins while playing, song name on hover */
+.music{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:var(--bg);display:grid;place-items:center;cursor:pointer}
+.music .disc{grid-area:1/1;width:100%;height:100%;border-radius:50%;box-shadow:0 4px 14px rgb(0 0 0 / .3);
+  background:radial-gradient(circle,var(--red) 0 30%,#111 31% 33%,transparent 34%),repeating-radial-gradient(circle,#161616 0 1.5px,#2a2a2a 1.5px 3px);
+  animation:spin 3.2s linear infinite;animation-play-state:paused}
+.music .disc::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgb(255 255 255 / .18),transparent 45%)}
+.music.on .disc{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.music svg{grid-area:1/1;width:12px;height:12px;position:relative}
 .music .i-pause,.music.on .i-play{display:none}
 .music.on .i-pause{display:block}
-.music.on{animation:pulse 2.4s ease-in-out infinite}
-@keyframes pulse{50%{box-shadow:0 6px 20px rgb(160 0 40 / .3),0 0 0 10px rgb(227 19 44 / .12)}}
-@media (prefers-reduced-motion:reduce){.music.on{animation:none}}
+.music .tip{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--red);color:var(--bg);font-family:var(--serif);font-size:16px;padding:5px 12px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s}
+.music:hover .tip,.music:focus-visible .tip{opacity:1}
+@media (prefers-reduced-motion:reduce){.music .disc{animation:none}}
 
 /* carousel pages: covers and title sit in the middle of the screen */
 .stagewrap{margin-top:auto}
@@ -190,7 +195,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 </section>
 
 <audio id="song" src="audio/pitch-the-baby.mp3" loop preload="none"></audio>
-<button class="music" id="music" type="button" aria-label="Play Pitch the Baby by Cocteau Twins" aria-pressed="false"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg></button>
+<button class="music" id="music" type="button" aria-label="Play Pitch the Baby by Cocteau Twins" aria-pressed="false"><span class="disc" aria-hidden="true"></span><span class="tip" aria-hidden="true">Pitch the Baby · Cocteau Twins</span><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg></button>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
