@@ -101,6 +101,13 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .art small{font-size:calc(var(--size) * .055);opacity:.85}
 
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:15px;padding:10px 20px;border-radius:999px;z-index:20}
+/* carousel pages: covers and title sit in the middle of the screen */
+.stagewrap{margin-top:auto}
+.stagewrap + .label{margin-bottom:auto}
+@media (max-width:700px){
+  .flow{--size:min(64vw,340px)}
+  #home nav{display:grid;grid-template-columns:auto auto;justify-content:center;gap:10px 32px}
+}
 @media (prefers-reduced-motion:reduce){.item{transition:none}}
 </style>
 
@@ -112,7 +119,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
   <nav aria-label="Pages">
     <h2><a href="#about">About</a></h2>
     <h2><a href="#work">Selected Work</a></h2>
-    <h2><a href="#inspo">Some Current Inspo</a></h2>
+    <h2><a href="#inspo">Current Inspo</a></h2>
     <h2><a href="#contact">Contact</a></h2>
   </nav>
 </section>
@@ -149,7 +156,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 </section>
 
 <section class="view page" id="inspo" hidden>
-  <div class="bar"><a href="#">SOPHIE BERRY</a><span>Some Current Inspo</span></div>
+  <div class="bar"><a href="#">SOPHIE BERRY</a><span>Current Inspo</span></div>
   <div class="stagewrap"><div class="flow" id="inspoFlow" tabindex="0" aria-label="Current inspiration, use arrow keys to browse"></div></div>
   <div class="label">
     <div class="arrows">
@@ -316,7 +323,7 @@ modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 const INSPO=['inspo-01.jpg','inspo-02.jpg','inspo-03.jpg','inspo-04.jpg','inspo-05.gif'];
 const inspoItems=INSPO.length
   ?INSPO.map((f,i)=>({label:`Inspo ${i+1}`,html:`<img src="images/inspo/${f}" alt="" draggable="false">`}))
-  :Array.from({length:7},(_,i)=>({label:`Inspo ${i+1}`,html:`<div class="art blank"><small>some current inspo</small><b>${String(i+1).padStart(2,'0')}</b></div>`}));
+  :Array.from({length:7},(_,i)=>({label:`Inspo ${i+1}`,html:`<div class="art blank"><small>current inspo</small><b>${String(i+1).padStart(2,'0')}</b></div>`}));
 const inspo=coverFlow(document.getElementById('inspoFlow'),inspoItems,1,()=>{},{hoverScroll:true,loop:true});
 
 const flows={work,inspo};
