@@ -227,16 +227,26 @@ function coverFlow(el,items,start,onChange,opts={}){
     el.addEventListener('mouseleave',()=>{clearTimeout(pending);pendingIdx=-1});
   }
   function layout(){
-    const s=nodes[0].offsetWidth;
+    const s=nodes[0].offsetWidth, N=nodes.length;
     nodes.forEach((n,i)=>{
-      const off=i-cur, a=Math.abs(off), sg=Math.sign(off);
+      let off=i-cur;
+      if(opts.loop){ off=((off%N)+N)%N; if(off>N/2) off-=N; } // wrap so the row is continuous
+      const a=Math.abs(off), sg=Math.sign(off);
       let t;
       if(off===0) t='translateX(0) translateZ(0) rotateY(0)';
       else t=`translateX(${sg*(s*.62+(a-1)*s*.26)}px) translateZ(${-s*.55}px) rotateY(${-sg*62}deg)`;
-      n.style.transform=t;n.style.zIndex=100-a;n.classList.toggle('on',off===0);
+      // a cover wrapping from one end to the other jumps instead of sliding across the middle
+      const jump=n._off!==undefined&&Math.abs(off-n._off)>N/2;
+      if(jump){n.style.transition='none';n.style.transform=t;n.offsetWidth;n.style.transition=''}
+      else n.style.transform=t;
+      n._off=off;n.style.zIndex=100-a;n.classList.toggle('on',off===0);
     });
   }
-  function go(i){cur=Math.max(0,Math.min(items.length-1,i));layout();onChange(cur,false)}
+  function go(i){
+    const N=items.length;
+    cur=opts.loop?((i%N)+N)%N:Math.max(0,Math.min(N-1,i));
+    layout();onChange(cur,false);
+  }
   el.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'){go(cur+1);e.preventDefault()}
     if(e.key==='ArrowLeft'){go(cur-1);e.preventDefault()}
@@ -278,7 +288,7 @@ const work=coverFlow(document.getElementById('workFlow'),
   (i,open)=>{
     wTitle.textContent=WORK[i].title;wSub.textContent=WORK[i].sub;
     if(open)openWork(i);
-  },{hoverScroll:true});
+  },{hoverScroll:true,loop:true});
 wMore.addEventListener('click',()=>openWork(work.cur));
 document.getElementById('mClose').addEventListener('click',()=>modal.close());
 modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
