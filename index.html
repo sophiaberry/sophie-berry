@@ -88,6 +88,8 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .shots img,.shots video{flex:none;display:block;height:clamp(220px,42vh,380px);width:auto;max-width:100%;object-fit:cover;background:var(--edge);scroll-snap-align:start}
 
 /* contact */
+.mail{margin:auto 0;font-family:var(--serif);font-size:clamp(30px,6vw,72px);text-decoration:none;overflow-wrap:anywhere;border-bottom:1px solid transparent}
+.mail:hover{border-color:currentColor}
 .email{font-family:var(--serif);font-size:clamp(24px,3vw,32px);user-select:all}
 .art{display:flex!important;flex-direction:column;justify-content:space-between;padding:8%;box-sizing:border-box;text-align:left}
 .art.red{background:var(--red);color:#fff}
@@ -157,16 +159,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 
 <section class="view page" id="contact" hidden>
   <div class="bar"><a href="#">SOPHIE BERRY</a><span>Contact</span></div>
-  <div class="stagewrap"><div class="flow" id="contactFlow" tabindex="0" aria-label="Contact options, use arrow keys to browse"></div></div>
-  <div class="label">
-    <h2 id="contactTitle"></h2>
-    <p id="contactSub"></p>
-    <div id="contactAction"></div>
-    <div class="arrows">
-      <button class="btn ghost" type="button" data-step="-1" data-flow="contact" aria-label="Previous">←</button>
-      <button class="btn ghost" type="button" data-step="1" data-flow="contact" aria-label="Next">→</button>
-    </div>
-  </div>
+  <a class="mail" href="mailto:sophienberry@gmail.com">sophienberry@gmail.com</a>
 </section>
 
 <div class="toast" id="toast" role="status" hidden></div>
@@ -317,12 +310,6 @@ wMore.addEventListener('click',()=>openWork(work.cur));
 document.getElementById('mClose').addEventListener('click',()=>modal.close());
 modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 
-/* contact */
-const cTitle=document.getElementById('contactTitle'),cSub=document.getElementById('contactSub'),cAct=document.getElementById('contactAction');
-const contact=coverFlow(document.getElementById('contactFlow'),
-  CONTACT.map(c=>({label:c.title,html:c.img?`<img src="images/${c.img}.jpg" alt="" draggable="false">`:c.art})),1,
-  i=>{const c=CONTACT[i];cTitle.textContent=c.title;cSub.textContent=c.sub;cAct.innerHTML=c.action});
-
 /* inspo: add picture filenames (in images/inspo/) to this list */
 const INSPO=[];
 const inspoItems=INSPO.length
@@ -330,7 +317,7 @@ const inspoItems=INSPO.length
   :Array.from({length:7},(_,i)=>({label:`Inspo ${i+1}`,html:`<div class="art blank"><small>some current inspo</small><b>${String(i+1).padStart(2,'0')}</b></div>`}));
 const inspo=coverFlow(document.getElementById('inspoFlow'),inspoItems,3,()=>{},{hoverScroll:true,loop:true});
 
-const flows={work,contact,inspo};
+const flows={work,inspo};
 document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{
   flows[b.dataset.flow].step(+b.dataset.step);
 }));
@@ -354,7 +341,6 @@ function show(){
   views.forEach(v=>v.hidden=v!==target);
   scrollTo(0,0);
   if(target.id==='work'){work.go(work.cur)}
-  if(target.id==='contact'){contact.go(contact.cur)}
   if(target.id==='inspo'){inspo.go(inspo.cur)}
 }
 addEventListener('hashchange',show);show();
