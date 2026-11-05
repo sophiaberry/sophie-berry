@@ -214,6 +214,10 @@ const WORK=[
   shots:[["desiwok-grid","Grid of Desi Wok TikTok posts with view counts, up to 84.6K"],["v:desiwok-01","Desi Wok summer menu video: tandoor plate, chili garlic noodles, piña colada masala"],["v:desiwok-02","Influencer video: first time trying Desi Wok"]]}
 ];
 
+/* order the projects appear in, starting from the one shown first */
+const ORDER=["alexis","athlos","rounds","spicewheel","jack","desiwok","moffett"];
+WORK.sort((a,b)=>ORDER.indexOf(a.id)-ORDER.indexOf(b.id));
+
 const EMAIL="sophienberry@gmail.com";
 const CONTACT=[
  {title:"Email",sub:"tell me what you're working on and when you need it",
@@ -318,7 +322,7 @@ function openWork(i){
   modal.showModal();modal.scrollTop=0;
 }
 const work=coverFlow(document.getElementById('workFlow'),
-  WORK.map(w=>({label:w.title,html:`<img src="images/${w.cover}.jpg" alt="" draggable="false">`})),3,
+  WORK.map(w=>({label:w.title,html:`<img src="images/${w.cover}.jpg" alt="" draggable="false">`})),0,
   (i,open)=>{
     wTitle.textContent=WORK[i].title;wSub.textContent=WORK[i].sub;
     if(open)openWork(i);
