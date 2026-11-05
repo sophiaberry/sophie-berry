@@ -46,6 +46,8 @@ button{font:inherit;color:inherit}
 .aboutbox img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
 .abouttext{display:grid;gap:16px;min-width:0}
 .abouttext p{margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.55;max-width:60ch}
+.abouttext .spec{padding-top:16px;border-top:1px solid var(--edge);font-weight:600}
+.spec span{display:block;font-weight:400;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 @media (max-width:640px){.aboutbox{grid-template-columns:1fr}.aboutbox img{max-width:360px}}
 
 /* cover flow */
@@ -118,6 +120,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
     <div class="abouttext">
       <p>All-in-one creative services by Sophie Berry, working from Tulsa but available worldwide.</p>
       <p>I bring the business, technical and creative sides to every project. I studied international business, information systems and Chinese, then built my career in creative marketing and production in New York.</p>
+      <p class="spec"><span>Specializing in</span>Marketing Strategy, Project Management, Website Design, Content Creation, Social Management</p>
     </div>
   </article>
 </section>
