@@ -49,6 +49,10 @@ button{font:inherit;color:inherit}
 .abouttext{display:grid;gap:16px;min-width:0}
 .abouttext p{margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.55;max-width:60ch}
 .reslink{text-decoration:underline;text-underline-offset:3px}
+.socials{display:flex;gap:18px;align-items:center}
+.socials a{display:inline-flex;transition:opacity .2s}
+.socials a:hover{opacity:.6}
+.socials svg{width:28px;height:28px;display:block}
 @media (max-width:640px){.aboutbox{grid-template-columns:1fr}.aboutbox img{max-width:360px}}
 
 /* cover flow */
@@ -133,6 +137,7 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
       <p>I bring the business, technical and creative sides to every project. I studied international business, information systems and Chinese, then built my career in creative marketing and production in New York.</p>
       <p>Specializing in Marketing Strategy, Project Management, Website Design, Content Creation, Social Management and Podcast Production.</p>
       <p><a class="reslink" href="Sophie_Berry_Resume.pdf" target="_blank" rel="noopener">View my full resume</a></p>
+      <p class="socials"><a href="https://www.linkedin.com/in/sophie-n-berry/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10.5v6M7.5 7.6v.1M11 16.5v-6M11 13.2c0-1.6 1-2.8 2.5-2.8s2.5 1 2.5 2.8v3.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a><a href="https://www.instagram.com/sophienberry/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg></a><a href="mailto:sophienberry@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a></p>
     </div>
   </article>
 </section>
