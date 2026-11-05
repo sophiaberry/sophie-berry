@@ -40,6 +40,14 @@ button{font:inherit;color:inherit}
 .bar span{color:var(--muted);font-size:16px}
 .stub{margin:auto 0;font-weight:800;font-size:clamp(40px,9vw,120px);line-height:.95}
 
+/* about */
+.aboutbox{margin:auto 0;width:min(880px,100%);display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);align-items:center;gap:clamp(20px,4vw,48px);
+  border:1px solid var(--edge);padding:clamp(16px,3vw,32px);text-align:left;box-sizing:border-box}
+.aboutbox img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.abouttext{display:grid;gap:16px;min-width:0}
+.abouttext p{margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.55;max-width:60ch}
+@media (max-width:640px){.aboutbox{grid-template-columns:1fr}.aboutbox img{max-width:360px}}
+
 /* cover flow */
 .stagewrap{align-self:stretch;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
   background:linear-gradient(to bottom,var(--bg) 0%,rgb(255 255 255 / 0) 18%,rgb(255 255 255 / 0) 55%,var(--bg) 100%),radial-gradient(ellipse 70% 90% at 50% 40%,var(--bg) 55%,var(--edge) 100%);overflow:hidden;padding-block:clamp(24px,5vw,56px) 0}
@@ -105,7 +113,13 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 
 <section class="view page" id="about" hidden>
   <div class="bar"><a href="#">SOPHIE BERRY</a><span>About</span></div>
-  <div class="stub">About</div>
+  <article class="aboutbox">
+    <img src="images/sophie.jpg" alt="Sophie Berry">
+    <div class="abouttext">
+      <p>All-in-one creative services by Sophie Berry, working from Tulsa but available worldwide.</p>
+      <p>I bring the business, technical and creative sides to every project. I studied international business, information systems and Chinese, then built my career in creative marketing and production in New York.</p>
+    </div>
+  </article>
 </section>
 
 <section class="view page" id="work" hidden>
