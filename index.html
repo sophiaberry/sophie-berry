@@ -43,13 +43,13 @@ button{font:inherit;color:inherit}
 /* cover flow */
 .stagewrap{align-self:stretch;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
   background:radial-gradient(ellipse 70% 90% at 50% 40%,var(--bg) 55%,var(--edge) 100%);overflow:hidden;padding-block:clamp(24px,5vw,56px) 0}
-.flow{--size:clamp(170px,34vw,380px);position:relative;height:calc(var(--size) * 1.5);perspective:1100px;touch-action:pan-y;user-select:none;outline:none}
+.flow{--size:clamp(170px,34vw,380px);position:relative;height:calc(var(--size) * 1.3);perspective:1100px;touch-action:pan-y;user-select:none;outline:none}
 .item{position:absolute;left:50%;top:0;width:var(--size);height:var(--size);margin-left:calc(var(--size) / -2);
   transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .55s;cursor:pointer;border:0;padding:0;background:none;transform-style:preserve-3d}
 .face,.refl{position:absolute;left:0;width:100%;height:100%;background:#000;overflow:hidden}
 .face{top:0}
 .refl{top:100%;margin-top:2px;transform:scaleY(-1);pointer-events:none;
-  -webkit-mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 50%);mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 50%)}
+  -webkit-mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 32%);mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 32%)}
 .item img,.item .art{display:block;width:100%;height:100%;object-fit:cover}
 .item:not(.on){filter:brightness(.9)}
 .label{display:flex;flex-direction:column;align-items:center;gap:8px;padding-inline:16px;min-height:96px}
