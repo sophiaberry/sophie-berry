@@ -203,17 +203,27 @@ function coverFlow(el,items,start,onChange,opts={}){
     b.type='button';b.className='item';b.tabIndex=-1;
     b.innerHTML=`<span class="face">${it.html}</span><span class="refl" aria-hidden="true">${it.html}</span>`;
     b.setAttribute('aria-label',it.label);
-    b.addEventListener('click',()=>{ if(dragged) return; if(scrub||i===cur) onChange(cur,true); else go(i); });
+    b.addEventListener('click',()=>{
+      if(dragged) return;
+      if(i===cur){onChange(cur,true);return}
+      go(i);
+      if(scrub) onChange(i,true); // with a mouse, clicking any cover opens it
+    });
     el.appendChild(b);return b;
   });
   if(scrub){
-    // move the mouse left/right across the covers to flip through them
+    // hovering a cover brings it into focus; a short pause while covers slide stops them chasing the cursor
+    let lockUntil=0,pending=null,pendingIdx=-1;
     el.addEventListener('mousemove',e=>{
-      const r=el.getBoundingClientRect();
-      const f=Math.max(0,Math.min(1,(e.clientX-r.left-r.width*.15)/(r.width*.7)));
-      const i=Math.round(f*(items.length-1));
-      if(i!==cur)go(i);
+      if(Date.now()<lockUntil) return;
+      const hit=document.elementFromPoint(e.clientX,e.clientY)?.closest('.item');
+      const i=hit?nodes.indexOf(hit):-1;
+      if(i<0||i===cur){clearTimeout(pending);pendingIdx=-1;return}
+      if(i===pendingIdx) return;
+      clearTimeout(pending);pendingIdx=i;
+      pending=setTimeout(()=>{pendingIdx=-1;go(i);lockUntil=Date.now()+450},90);
     });
+    el.addEventListener('mouseleave',()=>{clearTimeout(pending);pendingIdx=-1});
   }
   function layout(){
     const s=nodes[0].offsetWidth;
