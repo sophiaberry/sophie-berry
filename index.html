@@ -313,7 +313,7 @@ document.getElementById('mClose').addEventListener('click',()=>modal.close());
 modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 
 /* inspo: add picture filenames (in images/inspo/) to this list */
-const INSPO=['inspo-01.jpg','inspo-02.jpg','inspo-03.jpg','inspo-04.jpg'];
+const INSPO=['inspo-01.jpg','inspo-02.jpg','inspo-03.jpg','inspo-04.jpg','inspo-05.jpg'];
 const inspoItems=INSPO.length
   ?INSPO.map((f,i)=>({label:`Inspo ${i+1}`,html:`<img src="images/inspo/${f}" alt="" draggable="false">`}))
   :Array.from({length:7},(_,i)=>({label:`Inspo ${i+1}`,html:`<div class="art blank"><small>some current inspo</small><b>${String(i+1).padStart(2,'0')}</b></div>`}));
