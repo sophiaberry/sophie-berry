@@ -73,8 +73,9 @@ dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(
 .detail p{margin:0;font-size:17px;line-height:1.55;max-width:65ch}
 .tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
 .tags li{border:1px solid var(--edge);border-radius:999px;padding:4px 12px;font-size:14px}
-.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.shots img{width:100%;height:auto;display:block}
+/* media sit in one row at a shared height, so a lone image never blows up to full width */
+.shots{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}
+.shots img,.shots video{flex:none;display:block;height:clamp(220px,42vh,380px);width:auto;max-width:100%;object-fit:cover;background:var(--edge);scroll-snap-align:start}
 
 /* contact */
 .email{font-size:clamp(18px,2.4vw,24px);font-weight:600;user-select:all}
@@ -152,11 +153,11 @@ const WORK=[
  {id:"alexis",title:"Alexis Ohanian",sub:"content strategy & social for the co-founder of reddit",cover:"alexis-cover",meta:"Content strategy & social · NYC",
   body:["Managed content strategy and social execution for Alexis Ohanian, co-founder of Reddit.","This included developing high-impact narratives, producing culturally relevant content, running the content calendar, and keeping the messaging aligned with his investments, values and public presence."],
   tags:["content strategy","narrative development","content production","content calendar","social execution"],
-  shots:[["alexis-grid","Grid of Alexis Ohanian social posts with view counts up to 2.5M"],["alexis-02","Sophie and Alexis Ohanian reviewing content on a laptop"]]},
+  shots:[["alexis-grid","Grid of Alexis Ohanian social posts with view counts up to 2.5M"],["alexis-02","Sophie and Alexis Ohanian reviewing content on a laptop"],["v:alexis-02","Alexis Ohanian social clip"]]},
  {id:"rounds",title:"Rounds",sub:"where healthcare meets wall street",cover:"rounds-cover",meta:"Producer · NYC",
   body:["End-to-end production for a video podcast on health tech and investing, presented by Silicon Valley Bank and hosted by Christina Farr and Stephanie Davis. Prepped guests and talking points, built each run-of-show, ran studio days in New York, and turned every episode into clips and social posts.","Guests included leaders from Midi Health, Rock Health Advisory, Aidoc, Oxeon, Grow Therapy and Talkspace."],
   tags:["guest prep","run-of-show","studio days","clips & social posts","linkedin & youtube"],
-  shots:[["rounds-01","Two Rounds episodes in the studio, hosts and guests at the mics"]]},
+  shots:[["v:rounds-02","Rounds episode footage: host and guest at the mics in the studio"],["rounds-01","Two Rounds episodes in the studio, hosts and guests at the mics"],["v:rounds-01","Rounds social clip with captions"]]},
  {id:"moffett",title:"Matt Moffett",sub:"portfolio site for a tulsa artist",cover:"moffett-03",meta:"Design & build · Tulsa",
   body:["A home for Matt's paintings, mosaics, sculptures and prints. Every piece shows full size, with what's available listed first and sold work kept on view.","The site is built from custom HTML and hosted on GitHub Pages, with a simple dashboard built on Pages CMS so Matt can add new work himself."],
   tags:["web design","custom html","github pages","pages cms dashboard"],
@@ -168,15 +169,15 @@ const WORK=[
  {id:"spicewheel",title:"Spice Wheel",sub:"social, content & video for a masala dabba brand",cover:"spicewheel-cover",meta:"Social, content & video · TikTok, Instagram, Facebook, Pinterest, YouTube",
   body:["Social management for Spice Wheel, a masala dabba brand, plus content and video produced end to end, from scripting through filming, editing and posting.","Drove Spice Wheel's social engagement rate from 7.8% to 28.1%, a 3.6x increase.","September 2025/2026 sales: $1,154 → $12,783. Same month, one year apart. The difference was marketing."],
   tags:["social management","scripting","filming","editing"],
-  shots:[["spicewheel-grid","Grid of Spice Wheel social posts: the gift box, kitchen videos and the history of the masala dabba"],["spicewheel-02","Spice Wheel masala dabba held over a flower bed, filled with whole and ground spices"]]},
+  shots:[["spicewheel-grid","Grid of Spice Wheel social posts: the gift box, kitchen videos and the history of the masala dabba"],["v:spicewheel-01","Spice Wheel video: spooning turmeric and coriander from a masala dabba"],["spicewheel-02","Spice Wheel masala dabba held over a flower bed, filled with whole and ground spices"]]},
  {id:"jack",title:"Jack Alexander",sub:"a coffee table book for tulsa collectors",cover:"jack-01",meta:"Book designer & producer · Tulsa",
   body:["Produced and edited a coffee table book for Tulsa art collectors Jack and Jan Alexander, documenting their personal collection of more than 2,000 works of art.","The book is both an archive and a love letter to a lifetime of collecting, capturing the depth behind one of Tulsa's most remarkable private collections."],
   tags:["book production","editing","art direction","print production"],
-  shots:[["jack-01","Silhouette of two people on a beach, from the Jack Alexander book"]]},
+  shots:[["jack-01","Silhouette of two people on a beach, from the Jack Alexander book"],["v:jack-01","Sneak peek inside the Alexander home and collection, Tulsa"]]},
  {id:"desiwok",title:"Desi Wok",sub:"social content & influencers",cover:"desiwok-cover",meta:"Social content & influencers · Tulsa",
   body:["Created a summer social content bundle for Desi Wok to grow awareness and sales through the season.","Alongside organic social, managed influencer content that put Desi Wok in front of thousands of new customers."],
   tags:["social content","influencer marketing","seasonal campaign"],
-  shots:[["desiwok-grid","Grid of Desi Wok TikTok posts with view counts, up to 84.6K"]]}
+  shots:[["desiwok-grid","Grid of Desi Wok TikTok posts with view counts, up to 84.6K"],["v:desiwok-01","Desi Wok summer menu video: tandoor plate, chili garlic noodles, piña colada masala"],["v:desiwok-02","Influencer video: first time trying Desi Wok"]]}
 ];
 
 const EMAIL="sophienberry@gmail.com";
@@ -266,7 +267,9 @@ function openWork(i){
   const w=WORK[i];
   document.getElementById('mTitle').textContent=w.title;
   document.getElementById('mSub').textContent=w.sub;
-  wDetail.innerHTML=`<div class="shots">${w.shots.map(([s,a])=>`<img src="images/${s}.jpg" alt="${a}">`).join('')}</div>
+  wDetail.innerHTML=`<div class="shots">${w.shots.map(([s,a])=>s.startsWith('v:')
+      ?`<video src="videos/${s.slice(2)}.mp4" poster="images/${s.slice(2)}-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="${a}"></video>`
+      :`<img src="images/${s}.jpg" alt="${a}">`).join('')}</div>
     <p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}${tagList(w.tags)}`;
   modal.showModal();modal.scrollTop=0;
 }
