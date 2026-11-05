@@ -43,10 +43,13 @@ button{font:inherit;color:inherit}
 /* cover flow */
 .stagewrap{align-self:stretch;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
   background:radial-gradient(ellipse 70% 90% at 50% 40%,var(--bg) 55%,var(--edge) 100%);overflow:hidden;padding-block:clamp(24px,5vw,56px) 0}
-.flow{--size:clamp(170px,34vw,380px);position:relative;height:calc(var(--size) * 1.45);perspective:1100px;touch-action:pan-y;user-select:none;outline:none}
+.flow{--size:clamp(170px,34vw,380px);position:relative;height:calc(var(--size) * 1.5);perspective:1100px;touch-action:pan-y;user-select:none;outline:none}
 .item{position:absolute;left:50%;top:0;width:var(--size);height:var(--size);margin-left:calc(var(--size) / -2);
-  transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .55s;cursor:pointer;border:0;padding:0;background:#000;
-  -webkit-box-reflect:below 1px linear-gradient(transparent 58%,rgb(255 255 255 / .38))}
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .55s;cursor:pointer;border:0;padding:0;background:none;transform-style:preserve-3d}
+.face,.refl{position:absolute;left:0;width:100%;height:100%;background:#000;overflow:hidden}
+.face{top:0}
+.refl{top:100%;margin-top:2px;transform:scaleY(-1);pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 50%);mask-image:linear-gradient(to top,rgb(0 0 0 / .4),transparent 50%)}
 .item img,.item .art{display:block;width:100%;height:100%;object-fit:cover}
 .item:not(.on){filter:brightness(.9)}
 .label{display:flex;flex-direction:column;align-items:center;gap:8px;padding-inline:16px;min-height:96px}
@@ -57,13 +60,20 @@ button{font:inherit;color:inherit}
 .btn:hover{background:var(--fg);color:var(--bg)}
 .btn.ghost{border-color:var(--edge)}
 
-/* work details */
-.detail{width:min(760px,100%);text-align:left;margin-top:32px;display:grid;gap:16px}
+/* work pop-up */
+dialog.modal{border:0;padding:0;width:min(860px,calc(100vw - 32px));max-height:calc(100dvh - 48px);overflow:auto;background:var(--bg);color:var(--fg);box-shadow:0 24px 80px rgb(0 0 0 / .35)}
+dialog.modal::backdrop{background:rgb(0 0 0 / .45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.mhead{text-align:left;position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 24px 16px;background:var(--bg);border-bottom:1px solid var(--edge)}
+.mhead h2{margin:0;font-weight:800;font-size:clamp(24px,3.4vw,36px);letter-spacing:-.01em;line-height:1.05}
+.mhead p{margin:6px 0 0;color:var(--muted);font-size:16px}
+.close{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--fg);background:var(--bg);font-size:22px;line-height:1;cursor:pointer}
+.close:hover{background:var(--fg);color:var(--bg)}
+.detail{text-align:left;display:grid;gap:16px;padding:20px 24px 28px}
 .detail .meta{color:var(--muted);font-size:15px;margin:0}
 .detail p{margin:0;font-size:17px;line-height:1.55;max-width:65ch}
 .tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
 .tags li{border:1px solid var(--edge);border-radius:999px;padding:4px 12px;font-size:14px}
-.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .shots img{width:100%;height:auto;display:block}
 
 /* contact */
@@ -109,7 +119,10 @@ button{font:inherit;color:inherit}
       <button class="btn ghost" type="button" data-step="1" data-flow="work" aria-label="Next">→</button>
     </div>
   </div>
-  <article class="detail" id="workDetail" hidden></article>
+  <dialog class="modal" id="workModal" aria-labelledby="mTitle">
+    <div class="mhead"><div><h2 id="mTitle"></h2><p id="mSub"></p></div><button class="close" type="button" id="mClose" aria-label="Close">×</button></div>
+    <article class="detail" id="workDetail"></article>
+  </dialog>
 </section>
 
 <section class="view page" id="inspo" hidden>
@@ -182,15 +195,26 @@ const CONTACT=[
 ];
 
 /* ---------- cover flow ---------- */
-function coverFlow(el,items,start,onChange){
+function coverFlow(el,items,start,onChange,opts={}){
   let cur=start;
+  const scrub=opts.hoverScroll&&matchMedia('(hover: hover) and (pointer: fine)').matches;
   const nodes=items.map((it,i)=>{
     const b=document.createElement('button');
     b.type='button';b.className='item';b.tabIndex=-1;
-    b.innerHTML=it.html;b.setAttribute('aria-label',it.label);
-    b.addEventListener('click',()=>{ if(dragged) return; if(i===cur) onChange(cur,true); else go(i); });
+    b.innerHTML=`<span class="face">${it.html}</span><span class="refl" aria-hidden="true">${it.html}</span>`;
+    b.setAttribute('aria-label',it.label);
+    b.addEventListener('click',()=>{ if(dragged) return; if(scrub||i===cur) onChange(cur,true); else go(i); });
     el.appendChild(b);return b;
   });
+  if(scrub){
+    // move the mouse left/right across the covers to flip through them
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const f=Math.max(0,Math.min(1,(e.clientX-r.left-r.width*.15)/(r.width*.7)));
+      const i=Math.round(f*(items.length-1));
+      if(i!==cur)go(i);
+    });
+  }
   function layout(){
     const s=nodes[0].offsetWidth;
     nodes.forEach((n,i)=>{
@@ -227,21 +251,24 @@ function coverFlow(el,items,start,onChange){
 /* work */
 const wTitle=document.getElementById('workTitle'),wSub=document.getElementById('workSub'),wMore=document.getElementById('workMore'),wDetail=document.getElementById('workDetail');
 const tagList=t=>`<ul class="tags">${t.map(x=>`<li>${x}</li>`).join('')}</ul>`;
-function renderWork(i){
+const modal=document.getElementById('workModal');
+function openWork(i){
   const w=WORK[i];
-  wDetail.innerHTML=`<p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}${tagList(w.tags)}
-    <div class="shots">${w.shots.map(([s,a])=>`<img src="images/${s}.jpg" alt="${a}" loading="lazy">`).join('')}</div>`;
+  document.getElementById('mTitle').textContent=w.title;
+  document.getElementById('mSub').textContent=w.sub;
+  wDetail.innerHTML=`<div class="shots">${w.shots.map(([s,a])=>`<img src="images/${s}.jpg" alt="${a}">`).join('')}</div>
+    <p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}${tagList(w.tags)}`;
+  modal.showModal();modal.scrollTop=0;
 }
 const work=coverFlow(document.getElementById('workFlow'),
   WORK.map(w=>({label:w.title,html:`<img src="images/${w.cover}.jpg" alt="" draggable="false">`})),3,
   (i,open)=>{
-    wTitle.textContent=WORK[i].title;wSub.textContent=WORK[i].sub;renderWork(i);
-    if(open){wDetail.hidden=false;wMore.textContent='Hide project';wDetail.scrollIntoView({behavior:'smooth',block:'start'})}
-  });
-wMore.addEventListener('click',()=>{
-  wDetail.hidden=!wDetail.hidden;wMore.textContent=wDetail.hidden?'See the project':'Hide project';
-  if(!wDetail.hidden)wDetail.scrollIntoView({behavior:'smooth',block:'start'});
-});
+    wTitle.textContent=WORK[i].title;wSub.textContent=WORK[i].sub;
+    if(open)openWork(i);
+  },{hoverScroll:true});
+wMore.addEventListener('click',()=>openWork(work.cur));
+document.getElementById('mClose').addEventListener('click',()=>modal.close());
+modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 
 /* contact */
 const cTitle=document.getElementById('contactTitle'),cSub=document.getElementById('contactSub'),cAct=document.getElementById('contactAction');
