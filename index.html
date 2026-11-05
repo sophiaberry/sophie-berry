@@ -304,7 +304,7 @@ function openWork(i){
   wDetail.innerHTML=`<div class="shots">${w.shots.map(([s,a])=>s.startsWith('v:')
       ?`<video src="videos/${s.slice(2)}.mp4" poster="images/${s.slice(2)}-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="${a}"></video>`
       :`<img src="images/${s}.jpg" alt="${a}">`).join('')}</div>
-    <p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}${tagList(w.tags)}`;
+    <p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}`;
   modal.showModal();modal.scrollTop=0;
 }
 const work=coverFlow(document.getElementById('workFlow'),
