@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Sophie Berry: website design, podcast production, project management, marketing strategy, content creation and social management. Tulsa, OK and worldwide.">
+<title>Sophie Berry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
+<style>
+/* Layout: white home with the name, big; Selected Work and Contact are cover-flow pages — tilted covers either side of one flat cover, reflections underneath, title below. */
+:root{
+  --bg:#ffffff;
+  --fg:#111111;
+  --muted:#6b6b6b;
+  --edge:#e6e6e6;
+  --red:#d9473d;
+  --font:"Archivo","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%;background:var(--bg);color:var(--fg)}
+body{font-family:var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:4px}
+button{font:inherit;color:inherit}
+
+/* home */
+.view{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(24px,4vw,48px);padding-block:48px}
+#home h1{margin:0;font-weight:800;font-size:clamp(48px,13vw,200px);line-height:.9;letter-spacing:-.02em;text-wrap:balance}
+#home nav{display:flex;flex-wrap:wrap;justify-content:center;gap:12px clamp(24px,4vw,56px)}
+#home nav h2{margin:0;font-weight:400;font-size:clamp(18px,2.2vw,26px)}
+#home nav a{text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+#home nav a:hover,#home nav a:focus-visible{border-color:currentColor}
+
+/* inner pages */
+.page{justify-content:flex-start;gap:0;padding-block:0 56px}
+.bar{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-block:20px}
+.bar a{font-weight:800;text-decoration:none;font-size:18px;letter-spacing:-.01em}
+.bar span{color:var(--muted);font-size:16px}
+.stub{margin:auto 0;font-weight:800;font-size:clamp(40px,9vw,120px);line-height:.95}
+
+/* cover flow */
+.stagewrap{align-self:stretch;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  background:radial-gradient(ellipse 70% 90% at 50% 40%,var(--bg) 55%,var(--edge) 100%);overflow:hidden;padding-block:clamp(24px,5vw,56px) 0}
+.flow{--size:clamp(170px,34vw,380px);position:relative;height:calc(var(--size) * 1.45);perspective:1100px;touch-action:pan-y;user-select:none;outline:none}
+.item{position:absolute;left:50%;top:0;width:var(--size);height:var(--size);margin-left:calc(var(--size) / -2);
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .55s;cursor:pointer;border:0;padding:0;background:#000;
+  -webkit-box-reflect:below 1px linear-gradient(transparent 58%,rgb(255 255 255 / .38))}
+.item img,.item .art{display:block;width:100%;height:100%;object-fit:cover}
+.item:not(.on){filter:brightness(.9)}
+.label{display:flex;flex-direction:column;align-items:center;gap:8px;padding-inline:16px;min-height:96px}
+.label h2{margin:0;font-weight:800;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;text-wrap:balance}
+.label p{margin:0;color:var(--muted);font-size:16px;max-width:52ch;text-wrap:balance}
+.arrows{display:flex;gap:10px;margin-top:6px}
+.btn{border:1.5px solid var(--fg);background:var(--bg);border-radius:999px;padding:7px 18px;cursor:pointer;font-weight:600;font-size:15px;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--fg);color:var(--bg)}
+.btn.ghost{border-color:var(--edge)}
+
+/* work details */
+.detail{width:min(760px,100%);text-align:left;margin-top:32px;display:grid;gap:16px}
+.detail .meta{color:var(--muted);font-size:15px;margin:0}
+.detail p{margin:0;font-size:17px;line-height:1.55;max-width:65ch}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.tags li{border:1px solid var(--edge);border-radius:999px;padding:4px 12px;font-size:14px}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
+.shots img{width:100%;height:auto;display:block}
+
+/* contact */
+.email{font-size:clamp(18px,2.4vw,24px);font-weight:600;user-select:all}
+.art{display:flex!important;flex-direction:column;justify-content:space-between;padding:8%;box-sizing:border-box;text-align:left}
+.art.red{background:var(--red);color:#fff}
+.art.black{background:#111;color:#fff}
+.art.paper{background:#f4f2ee;color:#111}
+.art b{font-weight:800;font-size:calc(var(--size) * .16);line-height:.9;letter-spacing:-.02em}
+.art small{font-size:calc(var(--size) * .055);opacity:.85}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:15px;padding:10px 20px;border-radius:999px;z-index:20}
+@media (prefers-reduced-motion:reduce){.item{transition:none}}
+</style>
+
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<section class="view" id="home">
+  <h1>SOPHIE BERRY</h1>
+  <nav aria-label="Pages">
+    <h2><a href="#about">About</a></h2>
+    <h2><a href="#work">Selected Work</a></h2>
+    <h2><a href="#inspo">Some Current Inspo</a></h2>
+    <h2><a href="#contact">Contact</a></h2>
+  </nav>
+</section>
+
+<section class="view page" id="about" hidden>
+  <div class="bar"><a href="#">SOPHIE BERRY</a><span>About</span></div>
+  <div class="stub">About</div>
+</section>
+
+<section class="view page" id="work" hidden>
+  <div class="bar"><a href="#">SOPHIE BERRY</a><span>Selected Work</span></div>
+  <div class="stagewrap"><div class="flow" id="workFlow" tabindex="0" aria-label="Selected work, use arrow keys to browse"></div></div>
+  <div class="label">
+    <h2 id="workTitle"></h2>
+    <p id="workSub"></p>
+    <div class="arrows">
+      <button class="btn ghost" type="button" data-step="-1" data-flow="work" aria-label="Previous">←</button>
+      <button class="btn" type="button" id="workMore">See the project</button>
+      <button class="btn ghost" type="button" data-step="1" data-flow="work" aria-label="Next">→</button>
+    </div>
+  </div>
+  <article class="detail" id="workDetail" hidden></article>
+</section>
+
+<section class="view page" id="inspo" hidden>
+  <div class="bar"><a href="#">SOPHIE BERRY</a><span>Some Current Inspo</span></div>
+  <div class="stub">Some Current Inspo</div>
+</section>
+
+<section class="view page" id="contact" hidden>
+  <div class="bar"><a href="#">SOPHIE BERRY</a><span>Contact</span></div>
+  <div class="stagewrap"><div class="flow" id="contactFlow" tabindex="0" aria-label="Contact options, use arrow keys to browse"></div></div>
+  <div class="label">
+    <h2 id="contactTitle"></h2>
+    <p id="contactSub"></p>
+    <div id="contactAction"></div>
+    <div class="arrows">
+      <button class="btn ghost" type="button" data-step="-1" data-flow="contact" aria-label="Previous">←</button>
+      <button class="btn ghost" type="button" data-step="1" data-flow="contact" aria-label="Next">→</button>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* ---------- content ---------- */
+const WORK=[
+ {id:"alexis",title:"Alexis Ohanian",sub:"content strategy & social for the co-founder of reddit",cover:"alexis-cover",meta:"Content strategy & social · NYC",
+  body:["Managed content strategy and social execution for Alexis Ohanian, co-founder of Reddit.","This included developing high-impact narratives, producing culturally relevant content, running the content calendar, and keeping the messaging aligned with his investments, values and public presence."],
+  tags:["content strategy","narrative development","content production","content calendar","social execution"],
+  shots:[["alexis-grid","Grid of Alexis Ohanian social posts with view counts up to 2.5M"],["alexis-02","Sophie and Alexis Ohanian reviewing content on a laptop"]]},
+ {id:"rounds",title:"Rounds",sub:"where healthcare meets wall street",cover:"rounds-cover",meta:"Producer · NYC",
+  body:["End-to-end production for a video podcast on health tech and investing, presented by Silicon Valley Bank and hosted by Christina Farr and Stephanie Davis. Prepped guests and talking points, built each run-of-show, ran studio days in New York, and turned every episode into clips and social posts.","Guests included leaders from Midi Health, Rock Health Advisory, Aidoc, Oxeon, Grow Therapy and Talkspace."],
+  tags:["guest prep","run-of-show","studio days","clips & social posts","linkedin & youtube"],
+  shots:[["rounds-01","Two Rounds episodes in the studio, hosts and guests at the mics"]]},
+ {id:"moffett",title:"Matt Moffett",sub:"portfolio site for a tulsa artist",cover:"moffett-03",meta:"Design & build · Tulsa",
+  body:["A home for Matt's paintings, mosaics, sculptures and prints. Every piece shows full size, with what's available listed first and sold work kept on view.","The site is built from custom HTML and hosted on GitHub Pages, with a simple dashboard built on Pages CMS so Matt can add new work himself."],
+  tags:["web design","custom html","github pages","pages cms dashboard"],
+  shots:[["moffett-home","Homepage of Matt Moffett's website: Enter into a land of whimsy. Loose, magical, realism."],["moffett-02","Painting of a villa and its gardens, with a fountain and pond"],["moffett-03","Painting of a polar bear in a tiara and a walrus in a jeweled crown, with a bear, a cow and a leopard"]]},
+ {id:"athlos",title:"ATHLOS",sub:"creative strategy & live social for the women's track meet",cover:"athlos-01",meta:"Creative strategy, social & media management · New York · London",
+  body:["<strong>ATHLOS 2024:</strong> Led creative strategy and content development across social for ATHLOS NYC 2024, managed the content calendar, built relationships with athletes and partners, and coordinated pre- and post-production for content shoots.","Partnerships managed included Toyota, Spectrum, WYN Beauty and Megan Thee Stallion.","ATHLOS NYC 2024 was a Shorty Awards finalist in the Real-Time Response and Event & Experiential categories.","<strong>ATHLOS NYC 2025 and ATHLOS LDN 2026:</strong> On-site media manager directing live EVS clipping from the broadcast truck, calling key moments as they happened so the social team could edit while the meet was still running, and co-managed live posting to amplify athlete moments and fan engagement in real time."],
+  tags:["creative strategy","content calendar","partnerships","shoot production","EVS direction","real-time social"],
+  shots:[["athlos-01","Sprinter lifting the ATHLOS London 2026 crown"],["athlos-02","Broadcast truck multiviewer and EVS controller during ATHLOS"]]},
+ {id:"spicewheel",title:"Spice Wheel",sub:"social, content & video for a masala dabba brand",cover:"spicewheel-cover",meta:"Social, content & video · TikTok, Instagram, Facebook, Pinterest, YouTube",
+  body:["Social management for Spice Wheel, a masala dabba brand, plus content and video produced end to end, from scripting through filming, editing and posting.","Drove Spice Wheel's social engagement rate from 7.8% to 28.1%, a 3.6x increase.","September 2025/2026 sales: $1,154 → $12,783. Same month, one year apart. The difference was marketing."],
+  tags:["social management","scripting","filming","editing"],
+  shots:[["spicewheel-grid","Grid of Spice Wheel social posts: the gift box, kitchen videos and the history of the masala dabba"],["spicewheel-02","Spice Wheel masala dabba held over a flower bed, filled with whole and ground spices"]]},
+ {id:"jack",title:"Jack Alexander",sub:"a coffee table book for tulsa collectors",cover:"jack-01",meta:"Book designer & producer · Tulsa",
+  body:["Produced and edited a coffee table book for Tulsa art collectors Jack and Jan Alexander, documenting their personal collection of more than 2,000 works of art.","The book is both an archive and a love letter to a lifetime of collecting, capturing the depth behind one of Tulsa's most remarkable private collections."],
+  tags:["book production","editing","art direction","print production"],
+  shots:[["jack-01","Silhouette of two people on a beach, from the Jack Alexander book"]]},
+ {id:"desiwok",title:"Desi Wok",sub:"social content & influencers",cover:"desiwok-cover",meta:"Social content & influencers · Tulsa",
+  body:["Created a summer social content bundle for Desi Wok to grow awareness and sales through the season.","Alongside organic social, managed influencer content that put Desi Wok in front of thousands of new customers."],
+  tags:["social content","influencer marketing","seasonal campaign"],
+  shots:[["desiwok-grid","Grid of Desi Wok TikTok posts with view counts, up to 84.6K"]]}
+];
+
+const EMAIL="sophienberry@gmail.com";
+const CONTACT=[
+ {title:"Email",sub:"tell me what you're working on and when you need it",
+  art:`<div class="art red"><small>sophie berry</small><b>EMAIL<br>ME</b></div>`,
+  action:`<div class="email">${EMAIL}</div><div class="arrows"><button class="btn" type="button" id="copyEmail">Copy email</button></div>`},
+ {title:"Sophie Berry",sub:"Tulsa, OK · Worldwide",img:"sophie",
+  action:``},
+ {title:"Instagram",sub:"@studio51media",
+  art:`<div class="art black"><small>instagram</small><b>@studio<br>51media</b></div>`,
+  action:`<a class="btn" href="https://www.instagram.com/studio51media" target="_blank" rel="noopener">Open Instagram</a>`},
+ {title:"Résumé",sub:"Sophie Berry, full resume",
+  art:`<div class="art paper"><small>sophie berry</small><b>RÉSUMÉ</b></div>`,
+  action:`<a class="btn" href="Sophie_Berry_Resume.pdf" target="_blank" rel="noopener">Open résumé (PDF)</a>`}
+];
+
+/* ---------- cover flow ---------- */
+function coverFlow(el,items,start,onChange){
+  let cur=start;
+  const nodes=items.map((it,i)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='item';b.tabIndex=-1;
+    b.innerHTML=it.html;b.setAttribute('aria-label',it.label);
+    b.addEventListener('click',()=>{ if(dragged) return; if(i===cur) onChange(cur,true); else go(i); });
+    el.appendChild(b);return b;
+  });
+  function layout(){
+    const s=nodes[0].offsetWidth;
+    nodes.forEach((n,i)=>{
+      const off=i-cur, a=Math.abs(off), sg=Math.sign(off);
+      let t;
+      if(off===0) t='translateX(0) translateZ(0) rotateY(0)';
+      else t=`translateX(${sg*(s*.62+(a-1)*s*.26)}px) translateZ(${-s*.55}px) rotateY(${-sg*62}deg)`;
+      n.style.transform=t;n.style.zIndex=100-a;n.classList.toggle('on',off===0);
+    });
+  }
+  function go(i){cur=Math.max(0,Math.min(items.length-1,i));layout();onChange(cur,false)}
+  el.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'){go(cur+1);e.preventDefault()}
+    if(e.key==='ArrowLeft'){go(cur-1);e.preventDefault()}
+    if(e.key==='Enter'){onChange(cur,true)}
+  });
+  let x0=null,dragged=false;
+  el.addEventListener('pointerdown',e=>{x0=e.clientX;dragged=false});
+  el.addEventListener('pointermove',e=>{if(x0!==null&&Math.abs(e.clientX-x0)>8)dragged=true});
+  el.addEventListener('pointerup',e=>{
+    if(x0===null)return;const dx=e.clientX-x0;x0=null;
+    if(Math.abs(dx)>40)go(cur+(dx<0?Math.max(1,Math.round(-dx/120)):-Math.max(1,Math.round(dx/120))));
+    setTimeout(()=>dragged=false,0);
+  });
+  let wheelLock=0;
+  el.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
+    e.preventDefault();const now=Date.now();if(now-wheelLock<220)return;wheelLock=now;go(cur+(e.deltaX>0?1:-1));
+  },{passive:false});
+  addEventListener('resize',layout);
+  return {go,step:d=>go(cur+d),layout,get cur(){return cur}};
+}
+
+/* work */
+const wTitle=document.getElementById('workTitle'),wSub=document.getElementById('workSub'),wMore=document.getElementById('workMore'),wDetail=document.getElementById('workDetail');
+const tagList=t=>`<ul class="tags">${t.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+function renderWork(i){
+  const w=WORK[i];
+  wDetail.innerHTML=`<p class="meta">${w.meta}</p>${w.body.map(p=>`<p>${p}</p>`).join('')}${tagList(w.tags)}
+    <div class="shots">${w.shots.map(([s,a])=>`<img src="images/${s}.jpg" alt="${a}" loading="lazy">`).join('')}</div>`;
+}
+const work=coverFlow(document.getElementById('workFlow'),
+  WORK.map(w=>({label:w.title,html:`<img src="images/${w.cover}.jpg" alt="" draggable="false">`})),3,
+  (i,open)=>{
+    wTitle.textContent=WORK[i].title;wSub.textContent=WORK[i].sub;renderWork(i);
+    if(open){wDetail.hidden=false;wMore.textContent='Hide project';wDetail.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+wMore.addEventListener('click',()=>{
+  wDetail.hidden=!wDetail.hidden;wMore.textContent=wDetail.hidden?'See the project':'Hide project';
+  if(!wDetail.hidden)wDetail.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+/* contact */
+const cTitle=document.getElementById('contactTitle'),cSub=document.getElementById('contactSub'),cAct=document.getElementById('contactAction');
+const contact=coverFlow(document.getElementById('contactFlow'),
+  CONTACT.map(c=>({label:c.title,html:c.img?`<img src="images/${c.img}.jpg" alt="" draggable="false">`:c.art})),1,
+  i=>{const c=CONTACT[i];cTitle.textContent=c.title;cSub.textContent=c.sub;cAct.innerHTML=c.action});
+
+document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{
+  (b.dataset.flow==='work'?work:contact).step(+b.dataset.step);
+}));
+
+/* toast + copy */
+const toast=document.getElementById('toast');let tt;
+function say(m){toast.textContent=m;toast.hidden=false;clearTimeout(tt);tt=setTimeout(()=>toast.hidden=true,2000)}
+document.addEventListener('click',e=>{
+  if(e.target.id!=='copyEmail')return;
+  navigator.clipboard.writeText(EMAIL).then(()=>say('Email copied'),()=>{
+    const r=document.createRange();r.selectNodeContents(document.querySelector('.email'));
+    getSelection().removeAllRanges();getSelection().addRange(r);say('Email selected, copy it with ⌘C');
+  });
+});
+
+/* routing */
+const views=[...document.querySelectorAll('.view')];
+function show(){
+  const id=location.hash.slice(1);
+  const target=views.find(v=>v.id===id)||document.getElementById('home');
+  views.forEach(v=>v.hidden=v!==target);
+  scrollTo(0,0);
+  if(target.id==='work'){work.go(work.cur)}
+  if(target.id==='contact'){contact.go(contact.cur)}
+}
+addEventListener('hashchange',show);show();
+</script>
+
+</body>
+</html>
